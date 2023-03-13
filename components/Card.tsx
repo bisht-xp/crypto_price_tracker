@@ -4,6 +4,7 @@ import Stats from "./Stats";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
+// Function used for putting commas
 export function numberWithCommas(x: number | string) {
   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -13,25 +14,53 @@ interface crypto {
   trending: Cryptos[];
 }
 
+//Function use to compare on the basis of market cap
+export function compare(a: Cryptos, b: Cryptos) {
+  if (a.market_cap > b.market_cap) {
+    return -1;
+  }
+  if (a.market_cap < b.market_cap) {
+    return 1;
+  }
+  return 0;
+}
+
+//Function use to compare on the basis of price change
+export function priceChange(a: Cryptos, b: Cryptos) {
+  if (a.price_change_24h > b.price_change_24h) {
+    return -1;
+  }
+  if (a.price_change_24h < b.price_change_24h) {
+    return 1;
+  }
+  return 0;
+}
+
 const Card: React.FC<crypto> = ({ coinList, trending }) => {
   const [coins, setCoins] = useState<Cryptos[]>(coinList);
   const { searchText, filterValue } = useSelector(
     (state: RootState) => state.searchAndFilter
   );
 
-  
   const handleSearch = () => {
     let tempCoins = coins;
-    if(searchText !== "") {
-      tempCoins =  coins.filter(
+
+    if (searchText !== "") {
+      tempCoins = coins.filter(
         (coin) =>
           coin.name.toLowerCase().includes(searchText) ||
           coin.symbol.toLowerCase().includes(searchText)
       );
     }
 
-    if(filterValue !== "") {
+    if (filterValue === "Trending") {
       tempCoins = trending;
+    }
+    if (filterValue === "market-cap") {
+      tempCoins = tempCoins.sort(compare);
+    }
+    if (filterValue === "24h-%") {
+      tempCoins = tempCoins.sort(priceChange);
     }
 
     return tempCoins;
