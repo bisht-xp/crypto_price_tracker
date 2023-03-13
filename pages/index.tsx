@@ -14,7 +14,6 @@ interface crypto {
 }
 
 const Home: React.FC<crypto> = ({ data, coinData }) => {
-  console.log(coinData);
   return (
     <>
       <Head>
