@@ -10,9 +10,10 @@ export function numberWithCommas(x: number | string) {
 
 interface crypto {
   coinList: Cryptos[];
+  trending: Cryptos[];
 }
 
-const Card: React.FC<crypto> = ({ coinList }) => {
+const Card: React.FC<crypto> = ({ coinList, trending }) => {
   const [coins, setCoins] = useState<Cryptos[]>(coinList);
   const { searchText, filterValue } = useSelector(
     (state: RootState) => state.searchAndFilter
@@ -20,11 +21,20 @@ const Card: React.FC<crypto> = ({ coinList }) => {
 
   
   const handleSearch = () => {
-      return coins.filter(
+    let tempCoins = coins;
+    if(searchText !== "") {
+      tempCoins =  coins.filter(
         (coin) =>
           coin.name.toLowerCase().includes(searchText) ||
           coin.symbol.toLowerCase().includes(searchText)
       );
+    }
+
+    if(filterValue !== "") {
+      tempCoins = trending;
+    }
+
+    return tempCoins;
   };
 
   return (
