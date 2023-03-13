@@ -8,9 +8,13 @@ import { AxiosResponse } from "axios";
 import Head from "next/head";
 import { Cryptos } from "@/constants";
 
+interface crypto {
+  data: Cryptos[];
+  coinData: Cryptos[];
+}
 
-const Home: React.FC<AxiosResponse<any, any>> = ({ data }) => {
-  
+const Home: React.FC<crypto> = ({ data, coinData }) => {
+  console.log(coinData);
   return (
     <>
       <Head>
@@ -35,7 +39,7 @@ const Home: React.FC<AxiosResponse<any, any>> = ({ data }) => {
         <div className="bg-primary sm:px-16 px-6 flex justify-center">
           <div className="xl:max-w-[1280px] w-full">
             <Search />
-            <Card coinList={data}/>
+            <Card coinList={data} trending={coinData}/>
             <Footer />
           </div>
         </div>
@@ -44,12 +48,14 @@ const Home: React.FC<AxiosResponse<any, any>> = ({ data }) => {
   );
 };
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const { data } = await axios.get<Cryptos[]>(
     `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`
   );
+  const trendingCoin = await axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=gecko_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h`)
+    const coinData = trendingCoin.data;
   return {
-    props: { data },
+    props: { data, coinData },
   };
 }
 
