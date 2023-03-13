@@ -49,10 +49,8 @@ const Search = () => {
             onChange={filterChangeHandler}
             className="font-poppins flex-1 px-4 py-3 w-full rounded-md bg-black-gradient border-transparent focus:border-dimWhite focus:bg-primary focus:ring-0 text-sm text-white"
           >
-            <option value="">Furnish Type</option>
-            <option value="fully-furnished">Fully Furnished</option>
-            <option value="partially-furnished">Partially Furnished</option>
-            <option value="not-furnished">Not Furnished</option>
+            <option value="market-cap">Market Cap</option>
+            <option value="24h-%">24h %</option>
           </select>
         </div>
       </div>
