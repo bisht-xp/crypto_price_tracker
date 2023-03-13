@@ -1,8 +1,16 @@
+import Card from "@/components/Card";
+import Footer from "@/components/Footer";
+import Hero from "@/components/Hero";
 import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
+import Search from "@/components/Search";
+import axios from "axios";
+import { AxiosResponse } from "axios";
 import Head from "next/head";
+import { Cryptos } from "@/constants";
 
-export default function Home() {
+
+const Home: React.FC<AxiosResponse<any, any>> = ({ data }) => {
+  
   return (
     <>
       <Head>
@@ -11,7 +19,7 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="w-full overflow-hidden bg-primary">
+      <div className="w-full overflow-hidden bg-primary flex flex-col">
         <div className="sm:px-16 px-6 w-full flex justify-start items-center">
           <div className="xl:max-w-[1280px] w-full">
             <Navbar />
@@ -20,10 +28,29 @@ export default function Home() {
 
         <div className="bg-primary flex justify-center items-start">
           <div className="xl:max-w-[1280px] w-full">
-            <Sidebar />
+            <Hero />
+          </div>
+        </div>
+
+        <div className="bg-primary sm:px-16 px-6 flex justify-center">
+          <div className="xl:max-w-[1280px] w-full">
+            <Search />
+            <Card coinList={data}/>
+            <Footer />
           </div>
         </div>
       </div>
     </>
   );
+};
+
+export async function getServerSideProps() {
+  const { data } = await axios.get<Cryptos[]>(
+    `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`
+  );
+  return {
+    props: { data },
+  };
 }
+
+export default Home;
