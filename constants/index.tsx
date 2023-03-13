@@ -9,16 +9,16 @@ export const navLinks: links[] = [
     title: "Home",
   },
   {
-    id: "features",
-    title: "Features",
+    id: "search",
+    title: "Search",
   },
   {
-    id: "product",
-    title: "Product",
+    id: "coins",
+    title: "Coins",
   },
   {
-    id: "clients",
-    title: "Clients",
+    id: "about",
+    title: "About",
   },
 ];
 
